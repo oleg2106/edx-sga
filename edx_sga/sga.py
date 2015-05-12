@@ -66,6 +66,7 @@ class StaffGradedAssignmentXBlock(XBlock):
     STUDENT_FILEUPLOAD_MAX_SIZE = 4 * 1000 * 1000  # 4 MB
 
     display_name = String(
+        display_name=u"Название задания",
         default=u'Задание, проверяемое преподавателем', scope=Scope.settings,
         help=u"Это название появляется в панели навигации вверху страницы."
     )
