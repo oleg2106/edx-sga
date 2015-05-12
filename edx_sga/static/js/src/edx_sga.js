@@ -164,11 +164,11 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 var score = Number(form.find('#grade-input').val());
                 event.preventDefault();
                 if (isNaN(score)) {
-                    form.find('.error').html('<br/>Баллы должны быть заданы в виде числа.');
+                    form.find('.error').html('<br/>Баллы должны быть заданы в виде числа!');
                 } else if (score !== parseInt(score)) {
-                    form.find('.error').html('<br/>Число баллов должно быть целым.');
+                    form.find('.error').html('<br/>Число баллов должно быть целым!');
                 } else if (score < 0) {
-                    form.find('.error').html('<br/>Число баллов должно быть положительным.');
+                    form.find('.error').html('<br/>Число баллов должно быть положительным!');
                 } else if (score > max_score) {
                     form.find('.error').html('<br/>Максимальный балл - ' + max_score);
                 } else {

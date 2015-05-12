@@ -7,7 +7,7 @@
        <b><%= display_name %></b>
     <% } %>
     <% if (uploaded) { %>
-      <p><b>Файл загружен</b> 
+      <p><b>Загруженный файл:</b> 
         <a href="<%= downloadUrl %>"><%= uploaded.filename %></a></p>
     <% } else { %>
       <p>Нет загруженных файлов.</p>
@@ -18,7 +18,7 @@
           <b>Комментарий преподавателя: </b> <%= graded.comment %>
         <% } %>
         <% if (annotated) { %><br/>
-          <b>Файл с пометками преподавателя</b>
+          <b>Файл с пометками преподавателя:</b>
           <a href="<%= annotatedUrl %>"><%= annotated.filename %></a>
         <% } %>
       </p>
@@ -28,9 +28,9 @@
     <% if (upload_allowed) { %>
     <p>
       <% if (uploaded) { %>
-        Загрузить другой файл
+        Загрузить другой файл:
       <% } else { %>
-        Загрузить выполненное задание
+        Загрузить выполненное задание:
       <% } %>
       <div class="upload">
         <input class="fileupload" type="file" name="assignment"/>
@@ -53,7 +53,7 @@
         <th>Имя пользователя</th>
         <th>ФИО студента</th>
         <th>Имя файла</th>
-        <th>Дата загрузки</th>
+        <th>Дата и время загрузки</th>
         <th>Оценка</th>
         <th>Комментарии преподавателя</th>
         <th>Пометки</th>
@@ -92,9 +92,9 @@
             <% if (assignment.may_grade) { %>
               <a class="enter-grade-button button" href="#{{ id }}-enter-grade">
                 <% if (assignment.needs_approval) { %>
-                  Подвтердить оценку
+                  Подтвердить оценку
                 <% } else { %>
-                  Введите оценку
+                  Поставить оценку
                 <% } %>
               </a>
            <% } %>

@@ -67,7 +67,7 @@ class StaffGradedAssignmentXBlock(XBlock):
 
     display_name = String(
         default=u'Задание, проверяемое преподавателем', scope=Scope.settings,
-        help=u"Это название появляется в панели навигации вверху страницы"
+        help=u"Это название появляется в панели навигации вверху страницы."
     )
 
     weight = Float(
@@ -384,10 +384,10 @@ class StaffGradedAssignmentXBlock(XBlock):
         try:
             points = int(points)
         except ValueError:
-			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого числа')
+			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого числа!')
         # Check that we are positive
         if points < 0:
-			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого положительного числа')
+			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого положительного числа!')
         self.points = points
 
         # Validate weight before saving
@@ -397,7 +397,7 @@ class StaffGradedAssignmentXBlock(XBlock):
             try:
                 weight = float(weight)
             except ValueError:
-				raise JsonHandlerError(400, u'Вес должен быть задан в виде десятичного числа')
+				raise JsonHandlerError(400, u'Вес должен быть задан в виде десятичного числа!')
             # Check that we are positive
             if weight < 0:
                 raise JsonHandlerError(
