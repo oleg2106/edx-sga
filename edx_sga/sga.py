@@ -21,6 +21,7 @@ from django.core.files import File
 from django.core.files.storage import default_storage
 from django.conf import settings
 from django.template import Context, Template
+from django.utils.encoding import iri_to_uri
 
 from student.models import user_by_anonymous_id
 from submissions import api as submissions_api
@@ -522,7 +523,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         return Response(
             app_iter=app_iter,
             content_type=mime_type,
-            content_disposition="attachment; filename=" + filename)
+            content_disposition="attachment; filename=*=UTF-8''{0}".format(iri_to_uri(filename)))
 
     @XBlock.handler
     def get_staff_grading_data(self, request, suffix=''):
