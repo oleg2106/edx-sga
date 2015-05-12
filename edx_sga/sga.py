@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 This block defines a Staff Graded Assignment.  Students are shown a rubric
 and invited to upload a file which is then graded by staff.
@@ -65,69 +66,69 @@ class StaffGradedAssignmentXBlock(XBlock):
     STUDENT_FILEUPLOAD_MAX_SIZE = 4 * 1000 * 1000  # 4 MB
 
     display_name = String(
-        default='Staff Graded Assignment', scope=Scope.settings,
-        help="This name appears in the horizontal navigation at the top of "
-             "the page."
+        default=u'Задание, проверяемое преподавателем', scope=Scope.settings,
+        help=u"Это название появляется в панели навигации вверху страницы"
     )
 
     weight = Float(
-        display_name="Problem Weight",
-        help=("Defines the number of points each problem is worth. "
-              "If the value is not set, the problem is worth the sum of the "
-              "option point values."),
+        display_name=u"Вес задания",
+        help=(u"Задает количество баллов за один пункт задания. "
+              u"Если значение не задано, баллы считаются как сумма "
+              u"оценок по критериям."),
         values={"min": 0, "step": .1},
         scope=Scope.settings
     )
 
     points = Integer(
-        display_name="Maximum score",
-        help=("Maximum grade score given to assignment by staff."),
+        display_name=u"Максимальная оценка",
+        help=(u"Максимальная оценка за задание от преподавателя."),
         default=100,
         scope=Scope.settings
     )
 
     staff_score = Integer(
-        display_name="Score assigned by non-instructor staff",
-        help=("Score will need to be approved by instructor before being "
-              "published."),
+        display_name=u"Оценка не преподавателем",
+        help=(u"Перед публикацией оценку должен будет подтвердить "
+              u"преподаватель."),        
         default=None,
         scope=Scope.settings
     )
 
     comment = String(
-        display_name="Instructor comment",
+        display_name=u"Комментарии преподавателя",
         default='',
         scope=Scope.user_state,
-        help="Feedback given to student by instructor."
+        help=u"Служат для обратной связи преподавателя со студентом."
     )
 
     annotated_sha1 = String(
-        display_name="Annotated SHA1",
+        display_name=u"SHA1 файла с пометками",
         scope=Scope.user_state,
         default=None,
-        help=("sha1 of the annotated file uploaded by the instructor for "
-              "this assignment.")
+        help=(u"Контрольная сумма (по алгоритму sha1) файла с "
+              u"пометками, загруженного преподавателем "
+              u"по результатам выполнения задания.")
     )
 
     annotated_filename = String(
-        display_name="Annotated file name",
+        display_name=u"Имя файла с пометками",
         scope=Scope.user_state,
         default=None,
-        help="The name of the annotated file uploaded for this assignment."
+        help=u"Имя файла с пометками, загруженного преподавателем."
     )
 
     annotated_mimetype = String(
-        display_name="Mime type of annotated file",
+        display_name=u"MIME-тип файла с пометками",
         scope=Scope.user_state,
         default=None,
-        help="The mimetype of the annotated file uploaded for this assignment."
+        help=u"MIME-тип файла с пометками, загруженного преподавателем."
     )
 
     annotated_timestamp = DateTime(
-        display_name="Timestamp",
+        display_name=u"Дата и время",
         scope=Scope.user_state,
         default=None,
-        help="When the annotated file was uploaded")
+        help=u"Когда был загружен файл с пометками.")
 
     def max_score(self):
         """
@@ -383,10 +384,10 @@ class StaffGradedAssignmentXBlock(XBlock):
         try:
             points = int(points)
         except ValueError:
-            raise JsonHandlerError(400, 'Points must be an integer')
+			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого числа')
         # Check that we are positive
         if points < 0:
-            raise JsonHandlerError(400, 'Points must be a positive integer')
+			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого положительного числа')
         self.points = points
 
         # Validate weight before saving
@@ -396,11 +397,11 @@ class StaffGradedAssignmentXBlock(XBlock):
             try:
                 weight = float(weight)
             except ValueError:
-                raise JsonHandlerError(400, 'Weight must be a decimal number')
+				raise JsonHandlerError(400, u'Вес должен быть задан в виде десятичного числа')
             # Check that we are positive
             if weight < 0:
                 raise JsonHandlerError(
-                    400, 'Weight must be a positive decimal number'
+                    400, u'Вес должен быть задан в виде положительного десятичного числа'
                 )
         self.weight = weight
 

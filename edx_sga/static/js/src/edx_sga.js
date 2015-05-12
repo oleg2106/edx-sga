@@ -33,17 +33,17 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     var do_upload = $(content).find('.upload').html('');
                     $(content).find('p.error').html('');
                     $('<button/>')
-                        .text('Upload ' + data.files[0].name)
+                        .text('Загрузить ' + data.files[0].name)
                         .appendTo(do_upload)
                         .click(function() {
-                            do_upload.text('Uploading...');
+                            do_upload.text('Загрузка...');
                             var block = $(element).find(".sga-block");
                             var data_max_size = block.attr("data-max-size");
                             var size = data.files[0].size;
                             if (!_.isUndefined(size)) {
                                 //if file size is larger max file size define in env(django)
                                 if (size >= data_max_size) {
-                                    state.error = 'The file you are trying to upload is too large.';
+                                    state.error = 'Файл, который вы пытаетесь загрузить, слишком большой.';
                                     render(state);
                                     return;
                                 }
@@ -54,7 +54,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 progressall: function(e, data) {
                     var percent = parseInt(data.loaded / data.total * 100, 10);
                     $(content).find('.upload').text(
-                        'Uploading... ' + percent + '%');
+                        'Загрузка... ' + percent + '%');
                 },
                 fail: function(e, data) {
                     /**
@@ -68,10 +68,10 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                          * here, so no good way to inform the user of what the
                          * limit is.
                          */
-                        state.error = 'The file you are trying to upload is too large.';
+                        state.error = 'Файл, который вы пытаетесь загрузить, слишком большой.';
                     } else {
                         // Suitably vague
-                        state.error = 'There was an error uploading your file.';
+                        state.error = 'Во время загрузки файла произошла ошибка.';
 
                         // Dump some information to the console to help someone
                         // debug.
@@ -137,7 +137,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     url: url,
                     progressall: function(e, data) {
                         var percent = parseInt(data.loaded / data.total * 100, 10);
-                        row.find('.upload').text('Uploading... ' + percent + '%');
+                        row.find('.upload').text('Загрузка... ' + percent + '%');
                     },
                     done: function(e, data) {
                         // Add a time delay so user will notice upload finishing
@@ -164,13 +164,13 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                 var score = Number(form.find('#grade-input').val());
                 event.preventDefault();
                 if (isNaN(score)) {
-                    form.find('.error').html('<br/>Grade must be a number.');
+                    form.find('.error').html('<br/>Баллы должны быть заданы в виде числа.');
                 } else if (score !== parseInt(score)) {
-                    form.find('.error').html('<br/>Grade must be an integer.');
+                    form.find('.error').html('<br/>Число баллов должно быть целым.');
                 } else if (score < 0) {
-                    form.find('.error').html('<br/>Grade must be positive.');
+                    form.find('.error').html('<br/>Число баллов должно быть положительным.');
                 } else if (score > max_score) {
-                    form.find('.error').html('<br/>Maximum score is ' + max_score);
+                    form.find('.error').html('<br/>Максимальный балл - ' + max_score);
                 } else {
                     // No errors
                     $.post(enterGradeUrl, form.serialize())
