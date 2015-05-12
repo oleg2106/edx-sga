@@ -394,6 +394,14 @@ class StaffGradedAssignmentXBlock(XBlock):
 
         # Validate weight before saving
         weight = data.get('weight', self.weight)
+
+        # Mihara: This is a dirty hack, but I can't tell where exactly does the decimal comma come in this situation, so
+        # doing that here.
+        if type(weight) is str:
+            weight = weight.replace(',','.')
+        if type(weight) is unicode:
+            weight = weight.replace(u',',u'.')
+
         # Check that weight is a float.
         if weight:
             try:
