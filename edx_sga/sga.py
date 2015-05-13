@@ -531,7 +531,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         return Response(
             app_iter=app_iter,
             content_type=mime_type,
-            content_disposition="attachment; filename=*=UTF-8''{0}".format(iri_to_uri(filename)))
+            content_disposition="attachment; filename*=UTF-8''{0}".format(iri_to_uri(filename)))
 
     @XBlock.handler
     def get_staff_grading_data(self, request, suffix=''):
