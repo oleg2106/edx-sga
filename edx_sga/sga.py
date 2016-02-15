@@ -424,6 +424,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         require(self.upload_allowed())
         upload = request.params['assignment']
         sha1 = _get_sha1(upload.file)
+        upload.file.name = upload.file.name.replace(',','_')
         answer = {
             "sha1": sha1,
             "filename": upload.file.name,
@@ -444,6 +445,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         """
         require(self.is_course_staff())
         upload = request.params['annotated']
+        upload.file.name = upload.file.name.replace(',','_')
         module = StudentModule.objects.get(pk=request.params['module_id'])
         state = json.loads(module.state)
         state['annotated_sha1'] = sha1 = _get_sha1(upload.file)
