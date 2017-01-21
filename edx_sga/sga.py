@@ -31,7 +31,7 @@ from webob.response import Response
 
 from xblock.core import XBlock
 from xblock.exceptions import JsonHandlerError
-from xblock.fields import DateTime, Scope, String, Float, Integer
+from xblock.fields import DateTime, Scope, String, Float, Integer, Boolean
 from xblock.fragment import Fragment
 
 from xmodule.util.duedate import get_extended_due_date
@@ -131,6 +131,13 @@ class StaffGradedAssignmentXBlock(XBlock):
         scope=Scope.user_state,
         default=None,
         help=u"Когда был загружен файл с пометками.")
+    
+    need_recheck = Boolean(
+        display_name=u"Требуется ли перепроверка работы",
+        scope=Scope.user_state,
+        default=None,
+        help=u"Работа была переписана, требуется перепроверка."
+    )    
 
     def max_score(self):
         """
@@ -263,6 +270,7 @@ class StaffGradedAssignmentXBlock(XBlock):
             "graded": graded,
             "max_score": self.max_score(),
             "upload_allowed": self.upload_allowed(),
+            "need_recheck": self.need_recheck,
         }
 
     def staff_grading_data(self):
@@ -327,6 +335,7 @@ class StaffGradedAssignmentXBlock(XBlock):
                     'may_grade': instructor or not approved,
                     'annotated': state.get("annotated_filename"),
                     'comment': state.get("comment", ''),
+                    'need_recheck': state.get("need_recheck", False),
                 }
 
         return {
@@ -435,6 +444,11 @@ class StaffGradedAssignmentXBlock(XBlock):
         path = self._file_storage_path(sha1, upload.file.name)
         if not default_storage.exists(path):
             default_storage.save(path, File(upload.file))
+            
+        #if student already have score, set recheck to true
+        if self.score is not None:
+            self.need_recheck = True
+        
         return Response(json_body=self.student_state())
 
     @XBlock.handler
@@ -559,6 +573,7 @@ class StaffGradedAssignmentXBlock(XBlock):
             submissions_api.set_score(uuid, score, self.max_score())
         else:
             state['staff_score'] = score
+        state['need_recheck'] = False
         state['comment'] = request.params.get('comment', '')
         module.state = json.dumps(state)
         module.save()
@@ -632,7 +647,8 @@ class StaffGradedAssignmentXBlock(XBlock):
         """
         Return whether student is allowed to submit an assignment.
         """
-        return not self.past_due() and self.score is None
+        #return not self.past_due() and self.score is None
+        return not self.past_due()
 
     def _file_storage_path(self, sha1, filename):
         # pylint: disable=no-member
