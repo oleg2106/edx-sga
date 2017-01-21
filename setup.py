@@ -16,11 +16,11 @@ def package_data(pkg, root_list):
 
 setup(
     name='edx-sga',
-    version='0.5.0',
+    version='7.0.0',
     description='edx-sga Staff Graded Assignment XBlock',
     license='Affero GNU General Public License v3 (GPLv3)',
-    url="https://github.com/mitodl/edx-sga",
-    author="MITx",
+    #url="https://github.com/mitodl/edx-sga",
+    #author="MITx",
     zip_safe=False,
     packages=find_packages(),
     include_package_data=True,
