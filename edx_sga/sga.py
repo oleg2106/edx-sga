@@ -225,6 +225,10 @@ class StaffGradedAssignmentXBlock(XBlock):
         )
         fragment.add_css(_resource("static/css/edx_sga.css"))
         fragment.add_javascript(_resource("static/js/src/edx_sga.js"))
+        
+        fragment.add_javascript_url("//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js")
+        fragment.add_css_url("//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css")
+        
         fragment.initialize_js('StaffGradedAssignmentXBlock')
         return fragment
 

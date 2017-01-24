@@ -9,6 +9,11 @@
     <% if (uploaded) { %>
       <p><b>Загруженный файл:</b> 
         <a href="<%= downloadUrl %>"><%= uploaded.filename %></a></p>
+      <p>
+        <% if (need_recheck) { %>
+          <span style="color:red; font-weugh:bold">Внимание!</span> Файл изменен, работа направлена на перепроверку
+        <% } %>
+      </p>
     <% } else { %>
       <p>Нет загруженных файлов.</p>
     <% } %>
@@ -22,13 +27,6 @@
           <a href="<%= annotatedUrl %>"><%= annotated.filename %></a>
         <% } %>
       </p>
-
-      <p>
-        <% if (need_recheck) { %>
-          <i>Файл был изменен, учителю будет предложено перепроверить работу</i>
-        <% } %>
-      </p>      
-      
       
     <% } else if (uploaded) { %>
       <p>За это задание оценка еще не выставлена.</p>
@@ -57,6 +55,7 @@
   {% if is_course_staff %}
   <script type="text/template" id="sga-grading-tmpl">
     <table class="gridtable">
+      <thead>
       <tr>
         <th>Имя пользователя</th>
         <th>ФИО студента</th>
@@ -66,7 +65,11 @@
         <th>Комментарии преподавателя</th>
         <th>Пометки</th>
         <th>Требуется пересмотр работы</th>
+        <th>Поставить отметку</th>
+        <th>Загрузить файл</th>
       </tr>
+      </thead>
+      <tboby>
       <% for (var i = 0; i < assignments.length; i++) { %>
       <%     var assignment = assignments[i]; %>
         <tr id="row-<%= assignment.module_id %>">
@@ -121,6 +124,7 @@
           </td>
         </tr>
       <% } %>
+      </tbody>
     </table>
   </script>
 
