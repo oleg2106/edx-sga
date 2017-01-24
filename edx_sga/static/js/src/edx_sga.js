@@ -112,11 +112,13 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             // Add download urls to template context
             data.downloadUrl = staffDownloadUrl;
             data.annotatedUrl = staffAnnotatedUrl;
-
+           
             // Render template
             $(element).find('#grade-info')
                 .html(gradingTemplate(data))
-                .data(data);
+                .data(data).ready(function(){
+                                     $('#grade-info .gridtable').DataTable();
+                                  });
 
             // Map data to table rows
             data.assignments.map(function(assignment) {
