@@ -331,7 +331,9 @@ class StaffGradedAssignmentXBlock(XBlock):
                     'fullname': module.student.profile.name,
                     'filename': submission['answer']["filename"],
                     'timestamp': submission['created_at'].strftime(
-                        DateTime.DATETIME_FORMAT
+                        #DateTime.DATETIME_FORMAT
+                        #'%H:%M, %-d %B %Y'
+                        '%Y-%m-%d %H:%M'
                     ),
                     'score': score,
                     'approved': approved,
