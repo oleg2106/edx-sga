@@ -331,12 +331,16 @@ class StaffGradedAssignmentXBlock(XBlock):
                     'fullname': module.student.profile.name,
                     'filename': submission['answer']["filename"],
                     'timestamp': submission['created_at'].strftime(
-                        DateTime.DATETIME_FORMAT
+                        #DateTime.DATETIME_FORMAT
+                        #'%H:%M, %-d %B %Y'
+                        '%Y-%m-%d %H:%M'
                     ),
                     'score': score,
                     'approved': approved,
-                    'needs_approval': instructor and needs_approval,
-                    'may_grade': instructor or not approved,
+                    #'needs_approval': instructor and needs_approval,
+                    #'may_grade': instructor or not approved,
+                    'needs_approval': needs_approval,
+                    'may_grade': True,
                     'annotated': state.get("annotated_filename"),
                     'comment': state.get("comment", ''),
                     'need_recheck': state.get("need_recheck", False),
@@ -572,11 +576,16 @@ class StaffGradedAssignmentXBlock(XBlock):
         module = StudentModule.objects.get(pk=request.params['module_id'])
         state = json.loads(module.state)
         score = int(request.params['grade'])
-        if self.is_instructor():
-            uuid = request.params['submission_id']
-            submissions_api.set_score(uuid, score, self.max_score())
-        else:
-            state['staff_score'] = score
+        #if self.is_instructor():
+            #uuid = request.params['submission_id']
+            #submissions_api.set_score(uuid, score, self.max_score())
+        #else:
+            #state['staff_score'] = score
+        
+        #approval all marks
+        uuid = request.params['submission_id']
+        submissions_api.set_score(uuid, score, self.max_score())
+        
         state['need_recheck'] = False
         state['comment'] = request.params.get('comment', '')
         module.state = json.dumps(state)
