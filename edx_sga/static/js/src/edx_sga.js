@@ -160,8 +160,18 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             form.find('#module_id-input').val(row.data('module_id'));
             form.find('#submission_id-input').val(row.data('submission_id'));
             form.find('#grade-input').val(row.data('score'));
-            form.find('#comment-input').text(row.data('comment'));
+            
+            // text() function doesn't work with textarea tag
+            // encode any saved html entities
+            var encoded = $("<div></div>").text(row.data('comment')).html();
+            form.find('#comment-input').val(encoded);
+            
             form.off('submit').on('submit', function(event) {
+                // we don't want to receive any code on comments
+                form.find('#comment-input').val(function(){
+                    var current_value = $(this).val();
+                    return $("<div></div>").text(current_value).html();        
+                });
                 var max_score = row.parents('#grade-info').data('max_score');
                 var score = Number(form.find('#grade-input').val());
                 event.preventDefault();
