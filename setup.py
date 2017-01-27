@@ -16,7 +16,7 @@ def package_data(pkg, root_list):
 
 setup(
     name='edx-sga',
-    version='7.2.2',
+    version='7.2.3',
     description='edx-sga Staff Graded Assignment XBlock',
     license='Affero GNU General Public License v3 (GPLv3)',
     #url="https://github.com/mitodl/edx-sga",

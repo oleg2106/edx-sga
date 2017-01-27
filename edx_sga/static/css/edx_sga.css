@@ -167,3 +167,13 @@
 .sga-block .display_name {
     color: inherit;
 }
+
+span.need_recheck {    
+    color: red;
+    display: block;
+    text-align: center;
+}
+
+#comment-input{
+    height: 120px;
+}
