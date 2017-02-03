@@ -116,9 +116,7 @@ function StaffGradedAssignmentXBlock(runtime, element) {
             // Render template
             $(element).find('#grade-info')
                 .html(gradingTemplate(data))
-                .data(data).ready(function(){
-                                     $('#grade-info .gridtable').DataTable();
-                                  });
+                .data(data);
 
             // Map data to table rows
             data.assignments.map(function(assignment) {
@@ -150,6 +148,13 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     }
                 });
             });
+            
+            $(element).find('#grade-info .gridtable').DataTable(
+                {
+                  "order": [[ 4, "asc" ]],
+                  "pageLength": 25
+                }
+            );
         }
 
         /* Click event handler for "enter grade" */
