@@ -229,7 +229,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         fragment.add_javascript_url("//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js")
         fragment.add_css_url("//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css")
         
-        fragment.initialize_js('StaffGradedAssignmentXBlock')
+        fragment.initialize_js('StaffGradedAssignmentXBlock', {'blockid': context['id']})
         return fragment
 
     def update_staff_debug_context(self, context):

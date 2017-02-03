@@ -1,5 +1,6 @@
 /* Javascript for StaffGradedAssignmentXBlock. */
-function StaffGradedAssignmentXBlock(runtime, element) {
+function StaffGradedAssignmentXBlock(runtime, element, params) {
+  
     function xblock($, _) {
         var uploadUrl = runtime.handlerUrl(element, 'upload_assignment');
         var downloadUrl = runtime.handlerUrl(element, 'download_assignment');
@@ -148,11 +149,18 @@ function StaffGradedAssignmentXBlock(runtime, element) {
                     }
                 });
             });
-            
+
             $(element).find('#grade-info .gridtable').DataTable(
                 {
                   "order": [[ 4, "asc" ]],
-                  "pageLength": 25
+                  "pageLength": 25,
+                  stateSave: true,
+                  stateSaveCallback: function(settings,data) {
+                      localStorage.setItem( 'DataTables_' + params.blockid, JSON.stringify(data) )
+                  },
+                  stateLoadCallback: function(settings) {
+                      return JSON.parse( localStorage.getItem( 'DataTables_' + params.blockid ) )
+                  }
                 }
             );
         }
