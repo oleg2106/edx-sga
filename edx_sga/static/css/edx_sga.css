@@ -1,5 +1,9 @@
 /* CSS for StaffGradedAssignmentXBlock */
 
+.sga-block .grade-modal {
+    bottom: auto;
+}
+
 .sga-block .staff-modal {
     position: fixed;
     z-index:100;

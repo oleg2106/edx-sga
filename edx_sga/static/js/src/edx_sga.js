@@ -138,14 +138,34 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
                     url: url,
                     progressall: function(e, data) {
                         var percent = parseInt(data.loaded / data.total * 100, 10);
-                        row.find('.upload').text('Загрузка... ' + percent + '%');
+                        row.find('.upload .annotated_info').text('Загрузка... ' + percent + '%');
                     },
+                    fail: function(e, data) {
+                        /**
+                        * Nginx and other sanely implemented servers return a
+                        * "413 Request entity too large" status code if an
+                        * upload exceeds its limit.  See the 'done' handler for
+                        * the not sane way that Django handles the same thing.
+                        */
+                        if (data.jqXHR.status === 413) {
+                            /* I guess we have no way of knowing what the limit is
+                            * here, so no good way to inform the user of what the
+                            * limit is.
+                            */
+                            var t = 'Файл, который вы пытаетесь загрузить, слишком большой.';
+                        } else {
+                            // Suitably vague
+                            var t = 'Во время загрузки файла произошла ошибка.';
+                        }
+                        var fail_message = $("<div></div>").text(t).css('color', 'red');
+                        row.find('.upload .annotated_info').html(fail_message);
+                    },                    
                     done: function(e, data) {
                         // Add a time delay so user will notice upload finishing
                         // for small files
                         setTimeout(
                             function() { renderStaffGrading(data.result); },
-                            3000);
+                            2000);
                     }
                 });
             });
@@ -176,14 +196,14 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
             
             // text() function doesn't work with textarea tag
             // encode any saved html entities
-            var encoded = $("<div></div>").text(row.data('comment')).html();
+            var encoded = $("<div></div>").html(row.data('comment')).text();
             form.find('#comment-input').val(encoded);
             
             form.off('submit').on('submit', function(event) {
                 // we don't want to receive any code on comments
                 form.find('#comment-input').val(function(){
                     var current_value = $(this).val();
-                    return $("<div></div>").text(current_value).html();        
+                    return $("<div></div>").text(current_value).html();
                 });
                 var max_score = row.parents('#grade-info').data('max_score');
                 var score = Number(form.find('#grade-input').val());
@@ -198,6 +218,7 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
                     form.find('.error').html('<br/>Максимальный балл - ' + max_score);
                 } else {
                     // No errors
+                    form.find('.error').html('');
                     $.post(enterGradeUrl, form.serialize())
                         .success(renderStaffGrading);
                 }
@@ -223,8 +244,11 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
                  *
                  * See: https://github.com/mitodl/edx-sga/issues/13
                  */
+//                 setTimeout(function() {
+//                     $('#grade-submissions-button').click();
+//                 }, 225);
                 setTimeout(function() {
-                    $('#grade-submissions-button').click();
+                    $("#lean_overlay").show();
                 }, 225);
             });
         }
