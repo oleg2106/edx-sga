@@ -136,6 +136,22 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
                 var url = staffUploadUrl + "?module_id=" + row.data("module_id");
                 $(this).fileupload({
                     url: url,
+                    add: function(e, data) {
+                        var do_upload = $(content).find('.fileupload').html('');
+                                var block = $(element).find(".sga-block");
+                                var data_max_size = block.attr("data-max-size");
+                                var size = data.files[0].size;
+                                if (!_.isUndefined(size)) {
+                                    //if file size is larger max file size define in env(django)
+                                    if (size >= data_max_size) {
+                                        var t = 'Файл, который вы пытаетесь загрузить, слишком большой.';
+                                        var fail_message = $("<div></div>").text(t).css('color', 'red');
+                                        row.find('.upload .annotated_info').html(fail_message);
+                                        return;
+                                    }
+                                }
+                                data.submit();
+                    },
                     progressall: function(e, data) {
                         var percent = parseInt(data.loaded / data.total * 100, 10);
                         row.find('.upload .annotated_info').text('Загрузка... ' + percent + '%');
