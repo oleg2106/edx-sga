@@ -226,8 +226,8 @@ class StaffGradedAssignmentXBlock(XBlock):
         fragment.add_css(_resource("static/css/edx_sga.css"))
         fragment.add_javascript(_resource("static/js/src/edx_sga.js"))
         
-        fragment.add_javascript_url("//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js")
-        fragment.add_css_url("//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css")
+        fragment.add_javascript_url("//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
+        fragment.add_css_url("//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css")
         
         fragment.initialize_js('StaffGradedAssignmentXBlock', {'blockid': context['id']})
         return fragment
@@ -572,10 +572,17 @@ class StaffGradedAssignmentXBlock(XBlock):
         """
         Persist a score for a student given by staff.
         """
+        
+        #we need only numeric strings
+        
+        try:
+            score = int(request.params['grade'])
+        except:
+            return Response(json_body=self.staff_grading_data())
+        
         require(self.is_course_staff())
         module = StudentModule.objects.get(pk=request.params['module_id'])
         state = json.loads(module.state)
-        score = int(request.params['grade'])
         #if self.is_instructor():
             #uuid = request.params['submission_id']
             #submissions_api.set_score(uuid, score, self.max_score())
@@ -607,7 +614,7 @@ class StaffGradedAssignmentXBlock(XBlock):
         """
         require(self.is_course_staff())
         student_id = request.params['student_id']
-        submissions_api.reset_score(student_id, self.course_id, self.block_id)
+        submissions_api.reset_score(student_id, unicode(self.course_id), unicode(self.block_id))
         module = StudentModule.objects.get(pk=request.params['module_id'])
         state = json.loads(module.state)
         state['staff_score'] = None
