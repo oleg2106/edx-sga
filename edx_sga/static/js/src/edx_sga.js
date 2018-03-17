@@ -206,6 +206,8 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
             var row = $(this).parents("tr");
             var form = $(element).find("#enter-grade-form");
             $(element).find('#student-name').text(row.data('fullname'));
+            $(element).find('.error').text('');
+            
             form.find('#module_id-input').val(row.data('module_id'));
             form.find('#submission_id-input').val(row.data('submission_id'));
             form.find('#grade-input').val(row.data('score'));
@@ -221,22 +223,29 @@ function StaffGradedAssignmentXBlock(runtime, element, params) {
                     var current_value = $(this).val();
                     return $("<div></div>").text(current_value).html();
                 });
-                var max_score = row.parents('#grade-info').data('max_score');
-                var score = Number(form.find('#grade-input').val());
+                
                 event.preventDefault();
-                if (isNaN(score)) {
-                    form.find('.error').html('<br/>Баллы должны быть заданы в виде числа!');
-                } else if (score !== parseInt(score)) {
-                    form.find('.error').html('<br/>Число баллов должно быть целым!');
-                } else if (score < 0) {
-                    form.find('.error').html('<br/>Число баллов должно быть положительным!');
-                } else if (score > max_score) {
-                    form.find('.error').html('<br/>Максимальный балл - ' + max_score);
-                } else {
-                    // No errors
-                    form.find('.error').html('');
-                    $.post(enterGradeUrl, form.serialize())
-                        .success(renderStaffGrading);
+                
+                var max_score = row.parents('#grade-info').data('max_score');
+                var score = form.find('#grade-input').val();
+                if (score.length == 0){
+                    form.find('.error').html('<br/>Балл не выставлен!');
+                }else{
+                    score = Number(form.find('#grade-input').val());
+                    if (isNaN(score)) {
+                        form.find('.error').html('<br/>Баллы должны быть заданы в виде числа!');
+                    } else if (score !== parseInt(score)) {
+                        form.find('.error').html('<br/>Число баллов должно быть целым!');
+                    } else if (score < 0) {
+                        form.find('.error').html('<br/>Число баллов должно быть положительным!');
+                    } else if (score > max_score) {
+                        form.find('.error').html('<br/>Максимальный балл - ' + max_score);
+                    } else {
+                        // No errors
+                        form.find('.error').html('');
+                        $.post(enterGradeUrl, form.serialize())
+                            .success(renderStaffGrading);
+                    }
                 }
             });
             form.find('#remove-grade').on('click', function() {

@@ -1,19 +1,14 @@
 /* CSS for StaffGradedAssignmentXBlock */
 
-.sga-block .grade-modal {
+.sga-block .grade-modal.modal, .leanModal_box {
     bottom: auto;
 }
 
-.sga-block .staff-modal {
-    position: fixed;
-    z-index:100;
-    display: none;
-    width: 80%;
-    height: 75%;
+.course-wrapper .course-content .sga-block .staff-modal {
     overflow: hidden;
-
-    left: 10% !important; /* important is necessary to override modal JS styling */
-    margin-left: 0px !important; /* important is necessary to override modal JS styling */
+    width: 100%;
+    left: 0 !important; /* important is necessary to override modal JS styling */
+    margin-left: 0 !important; /* important is necessary to override modal JS styling */
 }
 
 .sga-block .staff-modal .inner-wrapper {
@@ -39,6 +34,14 @@
     background-color: #dedede;
 }
 
+.sga-block table.gridtable th.small_width {
+    width: 100px;
+}
+
+.sga-block table.gridtable th.normal_width {
+    width: 220px;
+}
+
 .sga-block table.gridtable td {
     border-width: 1px;
     padding: 8px;
@@ -61,18 +64,11 @@
 
 .sga-block .upload .fileupload {
     position: relative;
-	-moz-opacity:0 ;
-	filter:alpha(opacity: 0);
-	opacity: 0;
-	z-index: 2;
+    -moz-opacity:0 ;
+    filter:alpha(opacity: 0);
+    opacity: 0;
+    z-index: 2;
     width: 200px;
-    cursor: pointer;
-}
-
-.sga-block td .upload button {
-    padding: 3px;
-    width: 100%;
-    height: 20px;
     cursor: pointer;
 }
 
@@ -159,13 +155,24 @@
     left: 0px;
     z-index: 2;
     padding: 2px;
-    width: 200px;
     color: #333346;
     font-weight: bold;
     font-size: 0.8125em;
     margin-top: 1px;
     height: 20px;
     cursor: pointer;
+}
+
+.sga-block td .upload button {
+    box-sizing: border-box;
+    padding: 0;
+    height: 20px;
+    cursor: pointer;
+}
+
+.sga-block a.button, .sga-block td .upload button{
+    width: 100%;
+    max-width: 200px;
 }
 
 .sga-block .display_name {
