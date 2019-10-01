@@ -91,7 +91,7 @@ class StaffGradedAssignmentXBlock(XBlock):
     staff_score = Integer(
         display_name=u"Оценка не преподавателем",
         help=(u"Перед публикацией оценку должен будет подтвердить "
-              u"преподаватель."),        
+              u"преподаватель."),
         default=None,
         scope=Scope.settings
     )
@@ -131,13 +131,13 @@ class StaffGradedAssignmentXBlock(XBlock):
         scope=Scope.user_state,
         default=None,
         help=u"Когда был загружен файл с пометками.")
-    
+
     need_recheck = Boolean(
         display_name=u"Требуется ли перепроверка работы",
         scope=Scope.user_state,
         default=None,
         help=u"Работа была переписана, требуется перепроверка."
-    )    
+    )
 
     def max_score(self):
         """
@@ -225,10 +225,10 @@ class StaffGradedAssignmentXBlock(XBlock):
         )
         fragment.add_css(_resource("static/css/edx_sga.css"))
         fragment.add_javascript(_resource("static/js/src/edx_sga.js"))
-        
+
         fragment.add_javascript_url("//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js")
         fragment.add_css_url("//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css")
-        
+
         fragment.initialize_js('StaffGradedAssignmentXBlock', {'blockid': context['id']})
         return fragment
 
@@ -364,6 +364,7 @@ class StaffGradedAssignmentXBlock(XBlock):
                 Return empty string if data is None else return data.
                 """
                 return data if data is not None else ''
+
             edit_fields = (
                 (field, none_to_empty(getattr(self, field.name)), validator)
                 for field, validator in (
@@ -403,10 +404,10 @@ class StaffGradedAssignmentXBlock(XBlock):
         try:
             points = int(points)
         except ValueError:
-			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого числа!')
+            raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого числа!')
         # Check that we are positive
         if points < 0:
-			raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого положительного числа!')
+            raise JsonHandlerError(400, u'Баллы должны быть заданы в виде целого положительного числа!')
         self.points = points
 
         # Validate weight before saving
@@ -424,7 +425,7 @@ class StaffGradedAssignmentXBlock(XBlock):
             try:
                 weight = float(weight)
             except ValueError:
-				raise JsonHandlerError(400, u'Вес должен быть задан в виде десятичного числа!')
+                raise JsonHandlerError(400, u'Вес должен быть задан в виде десятичного числа!')
             # Check that we are positive
             if weight < 0:
                 raise JsonHandlerError(
@@ -452,11 +453,11 @@ class StaffGradedAssignmentXBlock(XBlock):
         path = self._file_storage_path(sha1, upload.file.name)
         if not default_storage.exists(path):
             default_storage.save(path, File(upload.file))
-            
+
         #if student already have score, set recheck to true
         if self.score is not None:
             self.need_recheck = True
-        
+
         return Response(json_body=self.student_state())
 
     @XBlock.handler
@@ -572,14 +573,14 @@ class StaffGradedAssignmentXBlock(XBlock):
         """
         Persist a score for a student given by staff.
         """
-        
+
         #we need only numeric strings
-        
+
         try:
             score = int(request.params['grade'])
         except:
             return Response(json_body=self.staff_grading_data())
-        
+
         require(self.is_course_staff())
         module = StudentModule.objects.get(pk=request.params['module_id'])
         state = json.loads(module.state)
@@ -588,11 +589,11 @@ class StaffGradedAssignmentXBlock(XBlock):
             #submissions_api.set_score(uuid, score, self.max_score())
         #else:
             #state['staff_score'] = score
-        
+
         #approval all marks
         uuid = request.params['submission_id']
         submissions_api.set_score(uuid, score, self.max_score())
-        
+
         state['need_recheck'] = False
         state['comment'] = request.params.get('comment', '')
         module.state = json.dumps(state)
